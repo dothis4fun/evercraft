@@ -13,8 +13,6 @@ Guy Royse [(@guyroyse)](https://twitter.com/guyroyse) and George Walters II [(@w
 3. Have a version of Java 11+ installed
 4. Make sure you Chrome install is up to date ([chrome://settings](chrome://settings) -> About Chrome)
     * The first time you run your tests, you will have to give WebDriver permission. (Under System Preferences -> Security and Privacy  -> Gereral tab - > Unlock button at the bottom. Bottom portion says "Allow apps downloaded from". You'll have to enable permission for Webdriver.
-5. (IF you are mobbing) install [Remote Programming Mob](https://github.com/remotemobprogramming/mob)
-    * Note if you are on a Mac, you'll need to have xCode installed before you install golang
 
 
 
