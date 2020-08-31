@@ -33,7 +33,7 @@ This iteration covers core functionality for leveling, combat, and character att
 - has 5 Hit Points by default
 - Attributes are Strength, Dexterity, Constitution, Wisdom, Intelligence, Charisma
 - Attributes range from 8 to 20 and default to 8
-- Thirty points to spend on attributes, can be increased to a maximum of 18
+- 30 points to spend on attributes, can be increased to a maximum of 18
 - Point costs increase as attribute is raised
 
 | Attribute  | Point Cost |
