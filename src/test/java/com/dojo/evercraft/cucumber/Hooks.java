@@ -11,9 +11,6 @@ public class Hooks {
     @Autowired
     private BossServer bossServer;
 
-    @Autowired
-    private Browser browser;
-
     private Hooks() {
 
     }
@@ -37,7 +34,6 @@ public class Hooks {
     @After
     public void afterEachScenario() {
         bossServer.stop();
-        browser.closeBrowser();
     }
 
 }

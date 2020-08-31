@@ -2,19 +2,14 @@
 
 # The EverCraft ATDD Kata   
 
-In this exercise, you will build out a simple web-based MMORPG called EverCraft using Acceptance Test-Driven Development.  
+In this exercise, you will build out the back-end API for a MMORPG called EverCraft using Acceptance Test-Driven Development.  
 
 Original kata by 
 Guy Royse [(@guyroyse)](https://twitter.com/guyroyse) and George Walters II [(@walterg2)](https://twitter.com/walterg2) here https://github.com/PuttingTheDnDInTDD/EverCraft-Kata
 
 ## Setup
-1. Install [Chrome Webdriver](https://github.com/SeleniumHQ/selenium/wiki/ChromeDriver)
-2. Install Cucumber plugin in IntelliJ
-3. Have a version of Java 11+ installed
-4. Make sure you Chrome install is up to date ([chrome://settings](chrome://settings) -> About Chrome)
-    * The first time you run your tests, you will have to give WebDriver permission. (Under System Preferences -> Security and Privacy  -> Gereral tab - > Unlock button at the bottom. Bottom portion says "Allow apps downloaded from". You'll have to enable permission for Webdriver.
-
-
+1. Install Cucumber plugin in IntelliJ
+1. Have a version of Java 11+ installed
 
 ## Requirements
 
@@ -26,45 +21,41 @@ This iteration covers core functionality for leveling, combat, and character att
 
 > As a player, I want to create a character so that I can be distinguished from other characters
 
-- has a name
-- can get and set alignment
+Player can set their:
+- Name
+- Alignment
     - alignments are Good, Evil, and Neutral
-- has an Armor Class that defaults to 10
-- has 5 Hit Points by default
-- Attributes are Strength, Dexterity, Constitution, Wisdom, Intelligence, Charisma
-- Attributes range from 8 to 20 and default to 8
-- Thirty points to spend on attributes, can be increased to a maximum of 18
-- Point costs increase as attribute is raised
+- Attribute levels
+    - Attributes are Strength, Dexterity, Constitution, Wisdom, Intelligence, Charisma
+    - Attributes range from 8 to 20 and default to 8
+    - 30 points to spend on attributes
+    - Attribute increases become more expensive as attribute is raised
 
-| Attribute  | Point Cost |
-|:----------:|:----------:|
-|   __8__    |    +1      |
-|   __9__    |    +1      |  
-|   __10__   |    +1      |  
-|   __11__   |    +1      |  
-|   __12__   |    +1      |  
-|   __13__   |    +1      |
-|   __14__   |    +2      |
-|   __15__   |    +2      |
-|   __16__   |    +3      |
-|   __17__   |    +3      |
+        | Current Attr | Point Cost for next level |
+        |:------------:|:-------------------------:|
+        |   __8__      |    +1                     |
+        |   __9__      |    +1                     |  
+        |   __10__     |    +1                     |  
+        |   __11__     |    +1                     |  
+        |   __12__     |    +1                     |  
+        |   __13__     |    +1                     |
+        |   __14__     |    +2                     |
+        |   __15__     |    +2                     |
+        |   __16__     |    +3                     |
+        |   __17__     |    +3                     |
+        |   __18__     |    +4                     |
+        |   __19__     |    +4                     |
+        |   __20__     |    n/a at max level       |
 
-```gherkin
-Given a new game is started
-When I create a character
-Then my character shows up in the game
-
-Given a game is already started
-And I created a character
-When I join the game
-Then my character should be ready to quest
-```
+Additionally, players have default values for the following characteristics:
+- has an Armor Class of 10
+- has Hit Points of 10
 
 #### Feature: Go on a quest
 
 > As a player, I want to have bosses to fight to make the game interesting
 
-Boss meta-data is retrieved from the boss service.
+Retrieve boss meta-data from the boss service.
 
 ```json
 {
@@ -87,16 +78,24 @@ Boss meta-data is retrieved from the boss service.
 
 > As a combatant I want to be able to attack other combatants so that I can survive to fight another day
 
-- roll a 20 sided die (don't code the die)
-- roll must meet or beat opponents armor class to hit
-- If attack is successful, other character takes 1 point of damage when hit
-- If a roll is a natural 20 then a critical hit is dealt and the damage is doubled
-- when hit points are 0 or fewer, the character is dead
+Retrieve roll values from the dice service.
 
+```json
+{
+  "number": 5
+}
+```
+
+- roll will mimic a 20-sided die (value from 1-20)
+- roll must beat opponents armor class to hit
+- If attack is successful, other character takes 1 point of damage when hit
+- If a roll is a natural 20 then a critical hit is dealt, and the damage is doubled
+- when hit points are 0 or fewer, the character is dead
+    - A character cannot have negative hit points
 
 #### Feature: Character Ability Modifiers Modify Attributes
 
-> As a character I want to apply my ability modifiers improve my capabilities in combat so that I can vanquish my enemy with extreme prejudice
+> As a character I want to apply my ability modifiers to improve my capabilities in combat so that I can vanquish my enemy with extreme prejudice
 
 - Attributes have modifiers according to the following table
 
@@ -119,35 +118,10 @@ Boss meta-data is retrieved from the boss service.
 - add Strength modifier to:
     - attack roll and damage dealt
     - double Strength modifier on critical hits
-    -  minimum damage is always 1 (even on a critical hit)
+    - minimum damage is always 1 (even with negative modifiers)
 - add Dexterity modifier to armor class
-- add Constitution modifier to hit points (always at least 1 hit point)
+- add Constitution modifier to hit points (negative modifier reduces hit points)
 
-** Note: Group come up with something for wisdom, intelligence, and charisma. 
-
-#### Feature: A Character can gain experience when attacking
-
-> As a character I want to accumulate experience points (xp) when I attack my enemies so that I can earn bragging rights at the tavern
-
-- When a successful attack occurs, the character gains 10 experience points
-
-#### Feature: A Character Can Level
-
-> As a character I want my experience points to increase my level and combat capabilities so that I can bring vengeance to my foes
-
-- Level defaults to 1
-- After 1000 experience points, the character gains a level
-    - 0 xp -> 1st Level
-    - 1000 xp -> 2nd Level
-    - 2000 xp -> 3rd Level
-    - etc.
-- For each level:
-    - hit points increase by 5 plus Con modifier
-    - 1 is added to attack roll for every even level achieved
-
-### Iteration 2 - Classes
-
-Classes that a character can have.
 
 #### Feature: Characters Have Classes
 
@@ -191,9 +165,6 @@ Classes that a character can have.
 - attacks roll is increased by 1 for every level instead of every other level
 - can only have Good alignment
 
-### Iteration 3 - Races
-
-Races that a character can be.
 
 #### Feature: Characters Have Races
 
@@ -237,9 +208,6 @@ play more interesting characters and wont be boring and unoriginal
 - +2 to Armor Class when being attacked by non Halfling (they are small and hard to hit)
 - cannot have Evil alignment
 
-### Iteration 4 - Weapons, Armor & Items
-
-Items that enhance a characters capabilities.
 
 #### Feature: Weapons
 
@@ -260,14 +228,14 @@ Items that enhance a characters capabilities.
 
 - does 5 points of damage
 
-> As a character I want to be able to wield a +2 waraxe that so that I can *be* cool
+> As a character I want to be able to wield a +2 war axe that so that I can *be* cool
 
 - does 6 points of damage
 - +2 to attack
 - +2 to damage
 - triple damage on a critical (quadruple for a Rogue)
 
-> As an elf I want to be able to wield a elven longsword that so I can stick it to that orc with the waraxe
+> As an elf I want to be able to wield an elven longsword that so I can stick it to that orc with the waraxe
 
 - does 5 points of damage
 - +1 to attack and damage
@@ -293,7 +261,7 @@ Items that enhance a characters capabilities.
 
 ##### Samples
 
-> As a character I want to the be able to wear leather armor so that I can soften attacks against me
+> As a character I want to be able to wear leather armor so that I can soften attacks against me
 
 - +2 to Armor Class
 
@@ -302,7 +270,7 @@ Items that enhance a characters capabilities.
 - +8 to Armor Class
 - can only be worn by fighters (of any race) and dwarves (of any class)
 
-> As a character I want to the be able to wear magical leather armor of damage reduction so that I can soften attacks against me
+> As a character I want to be able to wear magical leather armor of damage reduction so that I can soften attacks against me
 
 - +2 to Armor Class
 - -2 to all damage received
@@ -346,8 +314,24 @@ Items that enhance a characters capabilities.
   - +2 to attack against Evil enemies
   - double above bonuses if worn by a paladin
 
-### Bonus Iteration - Battle Grid
+#### Feature: A Character can gain experience when attacking
 
-Build your own features here.  Multiple characters can be on a grid-based map.  Each square on the map had terrain
-that impacts the occupant or opponents attacking into it.  Characters can move and weapons have ranges.
+> As a character I want to accumulate experience points (xp) when I attack my enemies so that I can earn bragging rights at the tavern
+
+- When a successful attack occurs, the character gains 10 experience points
+
+#### Feature: A Character Can Level
+
+> As a character I want my experience points to increase my level and combat capabilities so that I can bring vengeance to my foes
+
+- Level defaults to 1
+- After 1000 experience points, the character gains a level
+    - 0 xp -> 1st Level
+    - 1000 xp -> 2nd Level
+    - 2000 xp -> 3rd Level
+    - etc.
+- For each level:
+    - hit points increase by 5 plus Con modifier
+    - 1 is added to attack roll for every even level achieved
+
 
