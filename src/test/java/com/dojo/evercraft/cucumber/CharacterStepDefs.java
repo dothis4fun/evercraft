@@ -11,6 +11,7 @@ public class CharacterStepDefs {
 
     @Given("a new game is started")
     public void aNewGameIsStarted() {
+
     }
 
     @When("I create a character named {string}")
@@ -53,4 +54,6 @@ public class CharacterStepDefs {
     @Then("my character shows up in the game")
     public void myCharacterShowsUpInTheGame() {
     }
+
+
 }
